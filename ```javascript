@@ -1,0 +1,260 @@
+// بيانات العقارات
+const properties = [
+  {
+    id: 1,
+    title: "شقة فاخرة للبيع – بيت بوس",
+    type: "sale",
+    image: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
+    price: "850,000,000 ريال",
+    details: "3 غرف – 2 حمام – تشطيب سوبر لوكس – موقع حيوي",
+    location: "بيت بوس",
+    rooms: 3,
+    bathrooms: 2,
+    area: "150 م²"
+  },
+  {
+    id: 2,
+    title: "أرض استثمارية مميزة – سعوان",
+    type: "land",
+    image: "https://images.unsplash.com/photo-1585082236329-6ed1d8df7f6d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
+    price: "1,200,000,000 ريال",
+    details: "شارع فرعي – مناسبة للاستثمار أو البناء السكني",
+    location: "سعوان",
+    area: "500 م²"
+  },
+  {
+    id: 3,
+    title: "فيلا راقية للبيع – حدة",
+    type: "sale",
+    image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
+    price: "2,500,000,000 ريال",
+    details: "مساحة 3 لبن – تشطيب فاخر – قريبة من الخدمات",
+    location: "حدة",
+    rooms: 5,
+    bathrooms: 4,
+    area: "350 م²"
+  },
+  {
+    id: 4,
+    title: "شقة للإيجار – السبعين",
+    type: "rent",
+    image: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
+    price: "500,000 ريال/سنوياً",
+    details: "2 غرف – 1 حمام – تشطيب جيد – مطلة على شارع رئيسي",
+    location: "السبعين",
+    rooms: 2,
+    bathrooms: 1,
+    area: "120 م²"
+  },
+  {
+    id: 5,
+    title: "محل تجاري للبيع – شارع النصر",
+    type: "sale",
+    image: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
+    price: "1,800,000,000 ريال",
+    details: "موقع تجاري ممتاز – واجهة زجاجية – مساحة كبيرة",
+    location: "بيت بوس",
+    area: "200 م²"
+  },
+  {
+    id: 6,
+    title: "فيلا للإيجار – حي الفروسية",
+    type: "rent",
+    image: "https://images.unsplash.com/photo-1570129477492-45c003edd2be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
+    price: "1,200,000 ريال/سنوياً",
+    details: "4 غرف – 3 حمام – حديقة – جراج لسيارتين",
+    location: "حي الفروسية",
+    rooms: 4,
+    bathrooms: 3,
+    area: "280 م²"
+  }
+];
+
+// DOM جاهز
+document.addEventListener('DOMContentLoaded', function() {
+  // عرض العقارات
+  displayProperties('all');
+  
+  // إعداد تصفية العقارات
+  setupPropertyFilter();
+  
+  // إعداد القائمة المتنقلة
+  setupMobileMenu();
+  
+  // إعداد زر العودة للأعلى
+  setupBackToTop();
+  
+  // إعداد نموذج الاتصال
+  setupContactForm();
+});
+
+// عرض العقارات
+function displayProperties(filter) {
+  const propertiesGrid = document.querySelector('.properties-grid');
+  propertiesGrid.innerHTML = '';
+  
+  const filteredProperties = filter === 'all' 
+    ? properties 
+    : properties.filter(property => property.type === filter);
+  
+  filteredProperties.forEach(property => {
+    const propertyCard = createPropertyCard(property);
+    propertiesGrid.appendChild(propertyCard);
+  });
+}
+
+// إنشاء بطاقة عقار
+function createPropertyCard(property) {
+  const card = document.createElement('div');
+  card.className = 'property-card';
+  
+  // تحديد لون ونص نوع العقار
+  let typeText, typeClass;
+  switch(property.type) {
+    case 'sale':
+      typeText = 'للبيع';
+      typeClass = 'sale';
+      break;
+    case 'rent':
+      typeText = 'للإيجار';
+      typeClass = 'rent';
+      break;
+    case 'land':
+      typeText = 'أرض';
+      typeClass = 'land';
+      break;
+    default:
+      typeText = 'عقار';
+      typeClass = 'other';
+  }
+  
+  card.innerHTML = `
+    <div class="property-image">
+      <img src="${property.image}" alt="${property.title}">
+    </div>
+    <div class="property-info">
+      <h3>${property.title}</h3>
+      <span class="property-type ${typeClass}">${typeText}</span>
+      <div class="property-details">
+        ${property.rooms ? `<span><i class="fas fa-bed"></i> ${property.rooms} غرف</span>` : ''}
+        ${property.bathrooms ? `<span><i class="fas fa-bath"></i> ${property.bathrooms} حمام</span>` : ''}
+        <span><i class="fas fa-map-marker-alt"></i> ${property.location}</span>
+      </div>
+      <p>${property.details}</p>
+      <div class="property-price">${property.price}</div>
+      <button class="btn primary-btn" style="width:100%; margin-top:15px;">
+        <i class="fas fa-info-circle"></i> تفاصيل أكثر
+      </button>
+    </div>
+  `;
+  
+  return card;
+}
+
+// إعداد تصفية العقارات
+function setupPropertyFilter() {
+  const filterButtons = document.querySelectorAll('.filter-btn');
+  
+  filterButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      // إزالة النشاط من جميع الأزرار
+      filterButtons.forEach(btn => btn.classList.remove('active'));
+      
+      // إضافة النشاط للزر المحدد
+      this.classList.add('active');
+      
+      // تصفية العقارات
+      const filter = this.getAttribute('data-filter');
+      displayProperties(filter);
+    });
+  });
+}
+
+// إعداد القائمة المتنقلة
+function setupMobileMenu() {
+  const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+  const navMenu = document.querySelector('nav ul');
+  
+  if (mobileMenuBtn) {
+    mobileMenuBtn.addEventListener('click', function() {
+      navMenu.classList.toggle('show');
+    });
+    
+    // إغلاق القائمة عند النقر على رابط
+    const navLinks = document.querySelectorAll('nav a');
+    navLinks.forEach(link => {
+      link.addEventListener('click', function() {
+        navMenu.classList.remove('show');
+      });
+    });
+  }
+}
+
+// إعداد زر العودة للأعلى
+function setupBackToTop() {
+  const backToTopBtn = document.getElementById('backToTop');
+  
+  window.addEventListener('scroll', function() {
+    if (window.scrollY > 300) {
+      backToTopBtn.classList.add('show');
+    } else {
+      backToTopBtn.classList.remove('show');
+    }
+  });
+  
+  backToTopBtn.addEventListener('click', function() {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  });
+}
+
+// إعداد نموذج الاتصال
+function setupContactForm() {
+  const contactForm = document.getElementById('contactForm');
+  
+  if (contactForm) {
+    contactForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // في الحقيقة، هنا يجب إرسال البيانات إلى الخادم
+      // لكن لأغراض العرض، سنقوم بعرض رسالة نجاح فقط
+      
+      // جمع بيانات النموذج
+      const formData = new FormData(contactForm);
+      const name = formData.get('name') || 'غير مذكور';
+      
+      // عرض رسالة نجاح
+      alert(`شكراً لك ${name}! تم استلام رسالتك بنجاح. سنتواصل معك في أقرب وقت ممكن.`);
+      
+      // إعادة تعيين النموذج
+      contactForm.reset();
+    });
+  }
+}
+
+// إضافة تأثيرات عند التمرير للروابط
+document.querySelectorAll('nav a').forEach(anchor => {
+  anchor.addEventListener('click', function(e) {
+    const href = this.getAttribute('href');
+    
+    // إذا كان الرابط يشير إلى قسم في الصفحة
+    if (href.startsWith('#')) {
+      e.preventDefault();
+      
+      const targetId = href.substring(1);
+      const targetElement = document.getElementById(targetId);
+      
+      if (targetElement) {
+        // حساب الموضع مع مراعاة الشريط العلوي
+        const offsetTop = targetElement.offsetTop - 80;
+        
+        window.scrollTo({
+          top: offsetTop,
+          behavior: 'smooth'
+        });
+      }
+    }
+  });
+});
